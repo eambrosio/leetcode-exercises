@@ -11,11 +11,15 @@ fn main() {
     println!("{:?}", two_sum(vec![3, 3], 6));
     println!("{:?}", two_sum(vec![2, 7, 11, 15], 9));
 
+    let start = std::time::Instant::now();
     println!("{:?}", three_digit_even_numbers(vec![2, 1, 3, 0]));
+    println!("duration: {:?}", start.elapsed());
+
+    let start = std::time::Instant::now();
     println!("{:?}", three_digit_even_numbers(vec![2, 2, 8, 8, 2]));
+    println!("duration: {:?}", start.elapsed());
 
     println!("{:?}", insert(vec![vec![1, 3], vec![6, 9]], vec![2, 5]));
-
     println!(
         "{:?}",
         insert(

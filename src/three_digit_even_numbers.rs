@@ -32,27 +32,44 @@
 // 3 <= digits.length <= 100
 // 0 <= digits[i] <= 9
 
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 
 // [2,2,8,8,2]
 pub fn three_digit_even_numbers(digits: Vec<i32>) -> Vec<i32> {
-    let mut results: HashSet<i32> = HashSet::default();
-    for (i, &hundred) in digits.iter().enumerate() {
-        for (j, &ten) in digits.iter().enumerate() {
-            if (i != j) {
-                for (k, &unit) in digits.iter().enumerate() {
-                    if (k != j && k != i) {
-                        let num = hundred * 100 + ten * 10 + unit;
-                        if (num % 2 == 0 && num / 100 > 0) {
-                            results.insert(num);
-                        }
-                    }
-                }
-            }
-        }
+    let mut results = vec![];
+    // initialize a vector with numbers from 0..9
+    let mut counter = [0; 10];
+
+    for num in digits {
+        // increase by `1` all numbers included in digits. we set the frequency based on the input.
+        counter[num as usize] += 1;
     }
 
-    let mut result_vec: Vec<i32> = results.into_iter().collect();
-    result_vec.sort();
-    result_vec
+    // this for loop starts at 1 because we don't want leading zeros
+    for i in 1..10 {
+        if counter[i] == 0 {
+            continue;
+        }
+
+        // mark the number to not used again in the next loop
+        counter[i] -= 1;
+
+        // this 2nd loop starts at 0
+        for j in 0..10 {
+            if counter[j] == 0 {
+                continue;
+            }
+            // mark the number to not used again in the next loop
+            counter[j] -= 1;
+            for k in (0..10).step_by(2) {
+                if counter[k] > 0 {
+                    results.push((k + 10 * j + 100 * i) as i32);
+                }
+            }
+            counter[j] += 1;
+        }
+        counter[i] += 1;
+    }
+
+    results
 }
